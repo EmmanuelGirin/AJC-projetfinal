@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: odoo
+  name: odoo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: odoo
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: odoo
+    spec:
+      containers:
+      - image: odoo:13
+        name: odoo
+        ports:
+        - containerPort: 8069
+        env:
+             - name: HOST
+               value: postgres
+             - name: USER
+               value: odoo
+             - name: PASSWORD
+               valueFrom:
+                  secretKeyRef:
+                     name: odoo-pgsql-password
+                     key: pgsql_pwd
+        volumeMounts:
+              - name: odoo-persistent-storage
+                mountPath: /var/lib/odoo
+        resources: {}
+      volumes:
+         - name: odoo-persistent-storage
+           persistentVolumeClaim:
+                 claimName: data-odoo-claim
+status: {}
