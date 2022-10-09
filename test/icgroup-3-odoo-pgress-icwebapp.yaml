@@ -1,0 +1,311 @@
+#Create Service to connect to intranet ic-wep app
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ic-web
+    environment: production
+  name: ic-web-frontend
+  namespace: icgroup
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+    nodePort: 31000
+  selector:
+    app: ic-web
+  type: NodePort
+
+#Create service to connnect to db
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: icgroup
+  name: odoo-postgres
+  labels:
+    app: odoo
+    environment : production
+spec:
+  ports:
+  - port: 5432
+    targetPort: 5432
+  selector:
+    app: odoo
+    tier: postgres
+
+---
+#Create service to connnect from webapp to odoo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: icgroup
+  name: odoo
+  labels:
+    app: odoo
+    environment : production
+spec:
+  ports:
+  - port: 8069
+    protocol: TCP
+    targetPort: 8069
+    nodePort: 31001
+  selector:
+    app: odoo
+    tier: frontend
+  type: NodePort
+
+  #Create PV for Postgress
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: data-pgress-volume
+  namespace: icgroup
+  labels:
+    type: local
+    environment: production
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data/psgress"
+
+#Create Volume Claim for postgress db data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: data-postgres-claim
+  namespace: icgroup
+  labels:
+    environment : production
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: manual
+  resources:
+    requests:
+      storage: 2Gi
+
+#Deploy Postgress Database
+--- 
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  labels: 
+    app: odoo
+    environment : production
+  name: odoo-postgres
+  namespace: icgroup
+spec: 
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: odoo
+  strategy: {}
+  template: 
+    metadata: 
+      labels: 
+        app: odoo
+        tier: postgres
+        environment : production
+    spec: 
+      containers: 
+        - 
+          env: 
+            - 
+              name: POSTGRES_DB
+              value: postgres
+            - 
+              name: POSTGRES_USER
+              value: odoo
+            - 
+              name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: odoo-pgsql-password
+                  key: odoo
+          image: "postgres:13"
+          name: postgres
+          ports: 
+            - 
+              containerPort: 5432
+              name: postgres
+          resources: {}
+          volumeMounts: 
+            - 
+              mountPath: /var/lib/postgresql
+              name: pgsql-persistent-storage
+      volumes: 
+        - 
+          name: pgsql-persistent-storage
+          persistentVolumeClaim: 
+            claimName: data-postgres-claim
+status: {}
+
+
+#Create PV for Odoo
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: data-odoo-volume
+  namespace: icgroup
+  labels:
+    type: local
+    environment: production
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data/odoo"
+
+#Create PV for Odoo
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: data-odoo-volume2
+  namespace: icgroup
+  labels:
+    type: local
+    environment: production
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data/odoo"
+
+#Create PVC for Odoo
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: data-odoo-claim
+  namespace: icgroup
+  labels:
+    environment : production
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: manual
+  resources:
+    requests:
+      storage: 2Gi
+
+#deploy Odoo
+--- 
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  labels: 
+    app: odoo
+    environment: production
+  name: odoo
+  namespace: icgroup
+spec: 
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: odoo
+      tier: frontend
+  strategy: {}
+  template: 
+    metadata: 
+      labels: 
+        app: odoo
+        environment: production
+        tier: frontend
+    spec:
+      initContainers:
+      - name: volume-mount-hack
+        image: busybox
+        command: ["sh", "-c", "chown -R 101:101 /var/lib/odoo && sleep 60"]
+        volumeMounts:
+        - name: odoo-persistent-storage
+          mountPath: /var/lib/odoo
+      containers: 
+        - 
+          env: 
+            - 
+              name: HOST
+              value: odoo-postgres
+            - 
+              name: USER
+              value: odoo
+            - 
+              name: PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: odoo-pgsql-password
+                  key: odoo
+          image: "odoo:13"
+          name: odoo
+          ports: 
+            - 
+              containerPort: 8069
+              name: odoo
+          resources: {}
+          volumeMounts: 
+            - 
+              mountPath: /var/lib/odoo
+              name: odoo-persistent-storage
+      volumes: 
+        - 
+          name: odoo-persistent-storage
+          persistentVolumeClaim: 
+            claimName: data-odoo-claim
+
+#Deploy ic-web
+--- 
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  labels: 
+    app: ic-web
+    environment: production
+  name: ic-web
+  namespace: icgroup
+spec: 
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: ic-web
+  strategy: {}
+  template: 
+    metadata: 
+      labels: 
+        app: ic-web
+        environment: production
+    spec: 
+      containers: 
+        - 
+          env: 
+            - 
+              name: ODOO_URL
+              value: "http://192.168.1.59:31001"
+            - 
+              name: PGADMIN_URL
+              value: "http://192.168.1.59:31002"
+          image: "esgirin/ic-webapp:1.0"
+          name: ic-webapp
+          ports: 
+            - 
+              containerPort: 8080
+          resources: {}
+          volumeMounts: ~
+      initContainers: ~
+status: {}
