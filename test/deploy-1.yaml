@@ -1,0 +1,10 @@
+#Create namespace
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: icgroup
+  labels:
+    environment : production
+spec: {}
+status: {}
