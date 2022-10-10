@@ -24,7 +24,7 @@ spec:
      containers:
        - env:
          - name: PGADMIN_DEFAULT_EMAIL
-           value: user@domain.com
+           value: user@pgadmin.com
          - name: PGADMIN_DEFAULT_PASSWORD
            valueFrom:
              secretKeyRef:
