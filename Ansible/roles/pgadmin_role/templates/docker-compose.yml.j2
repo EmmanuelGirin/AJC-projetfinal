@@ -1,0 +1,37 @@
+version: '3.7'
+
+services:
+      
+  pgadmin:
+      container_name: {{ NAME_DOCKER_PGADMIN }} 
+      image: dpage/pgadmin4
+      user: root
+      
+      environment:
+        PGADMIN_DEFAULT_EMAIL: {{ PGADMIN_DEFAULT_EMAIL }} 
+        PGADMIN_DEFAULT_PASSWORD: {{ PGADMIN_DEFAULT_PASSWORD }} 
+        PGADMIN_CONFIG_SERVER_MODE: 'False'
+        PGADMIN_LISTEN_PORT: {{ PGADMIN_LISTEN_PORT }} 
+    
+      ports:
+        - "{{ PGADMIN_PORT }} :{{ PGADMIN_LISTEN_PORT }}"
+
+      networks:
+        - frontend
+        - backend
+
+      logging:
+        driver: "none"
+    
+      volumes:
+        - pgadmin4:{{ PGADMIN_DATA }} 
+    
+      restart: always
+
+networks:
+  frontend: {}
+  backend: {}
+    #driver: bridge
+
+volumes:
+  pgadmin4:

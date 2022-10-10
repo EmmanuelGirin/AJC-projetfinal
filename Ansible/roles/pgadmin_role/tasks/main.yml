@@ -1,0 +1,18 @@
+---
+  - name: "Creation du dossier pgadmin"
+    file:
+      path: /home/{{ ansible_user }}/pgadmin
+      state: directory
+      mode: '0755'
+
+  - name: "Copie du docker compose"
+    template:
+      src: "docker-compose.yml.j2"
+      dest: "/home/{{ user }}/pgadmin/docker-compose.yml"
+      mode: "0755"
+
+  - name: "Lancement du docker compose"
+    docker-compose:
+      project_src: "/home/{{ user }}/pgadmin/"
+      files:
+      - docker-compose.yml
