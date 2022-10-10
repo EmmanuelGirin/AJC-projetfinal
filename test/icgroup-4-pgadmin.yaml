@@ -13,7 +13,7 @@ data:
            "Name": "PostgreSQL DB",
            "Group": "Servers",
            "Port": 5432,
-           "Username": "odoo",
+           "Username": "user-odoo",
            "Host": "odoo-postgres",
            "SSLMode": "prefer",
            "MaintenanceDB": "postgres",
