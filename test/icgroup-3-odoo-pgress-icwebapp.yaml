@@ -127,7 +127,7 @@ spec:
               value: postgres
             - 
               name: POSTGRES_USER
-              value: odoo
+              value: user-odoo
             - 
               name: POSTGRES_PASSWORD
               valueFrom:
@@ -247,7 +247,7 @@ spec:
               value: odoo-postgres
             - 
               name: USER
-              value: odoo
+              value: user-odoo
             - 
               name: PASSWORD
               valueFrom:
