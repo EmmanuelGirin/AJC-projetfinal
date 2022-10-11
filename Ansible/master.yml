@@ -1,10 +1,10 @@
 ---
 - name: "Installation"
-  hosts: all
+  hosts: prod:dev
   become: true
   vars_files:
     - files/secrets/creditentials.yml
   roles:
-    - role: geerlingguy.docker
+    - role: docker_role
     - role: odoo_role
     - role: pgadmin_role
