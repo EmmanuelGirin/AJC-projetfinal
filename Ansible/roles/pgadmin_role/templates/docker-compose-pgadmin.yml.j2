@@ -14,7 +14,7 @@ services:
         PGADMIN_LISTEN_PORT: {{ PGADMIN_LISTEN_PORT }} 
     
       ports:
-        - "{{ PGADMIN_PORT }} :{{ PGADMIN_LISTEN_PORT }}"
+        - "{{ PGADMIN_PORT }}:{{ PGADMIN_LISTEN_PORT }}"
 
       networks:
         - frontend

@@ -1,7 +1,7 @@
 ---
 POSTGRES_DB: postgres
-POSTGRES_USER: odoo
-POSTGRES_PASSWORD: {{ vault_pwd }}
+POSTGRES_USER: "{{ postgres_user_vault }}"
+POSTGRES_PASSWORD: "{{ odoo_pwd_vault }}"
 PG_DATA: /var/lib/postgresql/data/pgdata
 ODOO_PORT: 8069
 ODOO_WEB_DATA: /var/lib/odoo
