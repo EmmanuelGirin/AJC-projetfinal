@@ -17,7 +17,8 @@ pipeline {
       steps {
         script {
           sh '''
-            docker build -t ${ID_DOCKER}/$IMAGE_NAME:$IMAGE_TAG $pwd/sources/ic-web-app/
+            cd sources/ic-web-app 
+            docker build -t ${ID_DOCKER}/$IMAGE_NAME:$IMAGE_TAG .
             '''
         }
       }
