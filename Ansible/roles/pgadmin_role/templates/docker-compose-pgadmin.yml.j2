@@ -24,6 +24,7 @@ services:
         driver: "none"
     
       volumes:
+        - ${PWD}/servers.json:/pgadmin4/servers.json
         - pgadmin4:{{ PGADMIN_DATA }} 
     
       restart: always

@@ -68,13 +68,6 @@
     append: yes
   when: ansible_distribution == "CentOS"    
 
-- name: Add remote user to docker group on EC2
-  user:
-    name: "{{ ansible_user }}"
-    groups: docker
-    append: yes
-  when: ansible_distribution == "Amazon"
-
 - name: Start and enable the Docker daemon
   service: 
     name: docker 

@@ -4,3 +4,7 @@ PGADMIN_LISTEN_PORT: 80
 PGADMIN_PORT: 5050
 PGADMIN_DATA: /var/lib/pgadmin
 NAME_DOCKER_PGADMIN: docker-pgadmin
+PGADMIN_CONFIG_NAME: docker_postgres
+PGADMIN_CONFIG_GROUP: docker_postgres_group
+PGADMIN_CONFIG_USERNAME: "{{ postgres_user_vault }}"
+PGADMIN_CONFIG_HOST: 192.168.99.12

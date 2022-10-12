@@ -8,7 +8,7 @@
     - role: docker_role
     - role: odoo_role
 - name: "Installation ic_web_app et pg_admin"
-  hosts: ic-webapp_pg
+  hosts: webapp_pg
   become: true
   vars_files:
     - files/secrets/creditentials.yml
