@@ -40,7 +40,7 @@ pipeline {
                 cd sources/ic-web-app
                 echo "Clean Environment"
                 docker rm -f $IMAGE_NAME || echo "container does not exist"
-                docker run --name $IMAGE_NAME -d -p ${PORT_EXPOSED}:8080 -e ODOO_URL=${ODOO_URL} -e PGADMIN_URL=${PGADMIN_URL} ${ID_DOCKER}/$IMAGE_NAME:$IMAGE_TAG
+                docker run --name $IMAGE_NAME -d -p ${PORT_EXPOSED}:8080 ${ID_DOCKER}/$IMAGE_NAME:$IMAGE_TAG
                 sleep 15
               '''
               }
@@ -53,8 +53,7 @@ pipeline {
           script {
             //Test that machine finds the corresponding url for each app
             sh '''
-                curl http://172.17.0.1:${PORT_EXPOSED} | grep ${ODOO_URL}
-                curl http://172.17.0.1:${PORT_EXPOSED} | grep ${PGADMIN_URL}
+                curl http://172.17.0.1:${PORT_EXPOSED} | grep "<a href"
             '''
           }
         }
