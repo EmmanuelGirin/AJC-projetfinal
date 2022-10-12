@@ -1,1 +1,1 @@
-ansible_host: {{ ip_serveur_webapp_pgadmin }}
+ansible_host: "{{ ip_serveur_webapp_pgadmin }}"
