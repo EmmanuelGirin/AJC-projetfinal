@@ -79,7 +79,7 @@ pipeline {
              script {
                sh '''
                 cd sources/ic-web-app
-                IMAGE_VERSION_TAG=$(awk '/version/ {sub(/^.* *version/,""); print $2}' releases.txt)
+                export IMAGE_VERSION_TAG=$(awk '/version/ {sub(/^.* *version/,""); print $2}' releases.txt)
 			          echo $DOCKERHUB_PASSWORD | docker login -u $ID_DOCKER --password-stdin
 			          docker push ${ID_DOCKER}/$IMAGE_NAME:$IMAGE_VERSION_TAG
                '''
