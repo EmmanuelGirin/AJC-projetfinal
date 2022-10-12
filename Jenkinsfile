@@ -17,8 +17,7 @@ pipeline {
       steps {
         script {
           sh '''
-            cd sources/ic-web-app
-            docker build -t ${ID_DOCKER}/$IMAGE_NAME:$IMAGE_TAG .
+            docker build -t ${ID_DOCKER}/$IMAGE_NAME:$IMAGE_TAG /sources/ic-web-app/
             '''
         }
       }
@@ -52,9 +51,7 @@ pipeline {
         steps {
           script {
             //Test that machine finds the corresponding url for each app
-            sh '''
-                curl http://172.17.0.1:${PORT_EXPOSED} | grep "<a href"
-            '''
+            sh "curl http://172.17.0.1:${PORT_EXPOSED} | grep 'a href'"
           }
         }
     }
