@@ -10,7 +10,7 @@ metadata:
   name: ic-web
   namespace: icgroup
 spec: 
-  replicas: 1
+  replicas: 2
   selector: 
     matchLabels: 
       app: ic-web
