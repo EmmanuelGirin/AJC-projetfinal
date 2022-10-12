@@ -1,0 +1,55 @@
+#Deploy Postgress Database
+--- 
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  labels: 
+    app: odoo
+    environment : production
+  name: odoo-postgres
+  namespace: icgroup
+spec: 
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: odoo
+  strategy: {}
+  template: 
+    metadata: 
+      labels: 
+        app: odoo
+        tier: postgres
+        environment : production
+    spec: 
+      containers: 
+        - 
+          env: 
+            - 
+              name: POSTGRES_DB
+              value: postgres
+            - 
+              name: POSTGRES_USER
+              value: user-odoo
+            - 
+              name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pgsql-password 
+                  key: odoo
+          image: "postgres:13"
+          name: postgres
+          ports: 
+            - 
+              containerPort: 5432
+              name: postgres
+          resources: {}
+          volumeMounts: 
+            - 
+              mountPath: /var/lib/postgresql
+              name: pgsql-persistent-storage
+      volumes: 
+        - 
+          name: pgsql-persistent-storage
+          persistentVolumeClaim: 
+            claimName: data-postgres-claim
+status: {}
