@@ -15,4 +15,4 @@ spec:
   accessModes:
     - ReadWriteMany
   hostPath:
-    path: "/mnt/pgadmin4"
+    path: "/mnt/data/pgadmin4"
