@@ -111,7 +111,7 @@ pipeline {
             script {
               sh '''
               export ANSIBLE_CONFIG=$(pwd)/sources/ansible-ressources/ansible.cfg
-              ansible-playbook sources/ansible-ressources/playbooks/deploy-pgadmin.yml --vault-password-file vault.key -l pg_admin
+              ansible-playbook sources/ansible-ressources/playbooks/deploy-pgadmin.yml --vault-password-file a -l pg_admin
               '''
            }
           }
