@@ -8,6 +8,8 @@
   - name : "create ic-webapp network"
     docker_network:
       name: "{{ postgres_network }}"
+    vars:
+      ansible_python_interpreter: /usr/bin/python3
 
   - name: "Lancement du docker compose"
     command: "docker-compose -f /home/{{ ansible_user }}/docker-compose-odoo.yml up -d"
