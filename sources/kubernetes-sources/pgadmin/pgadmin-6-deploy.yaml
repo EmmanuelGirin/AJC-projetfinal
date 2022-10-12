@@ -21,6 +21,13 @@ spec:
        environment: production
        tier: frontend
    spec:
+     initContainers:
+      - name: volume-mount-hack
+        image: busybox
+        command: ["sh", "-c", " chown -R 5050:5050 /var/lib/pgadmin"]
+        volumeMounts:
+        - name: pg-admin-data
+          mountPath: /var/lib/pgadmin
      containers:
        - env:
          - name: PGADMIN_DEFAULT_EMAIL
