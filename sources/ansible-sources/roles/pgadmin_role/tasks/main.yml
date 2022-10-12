@@ -4,12 +4,16 @@
       src: "docker-compose-pgadmin.yml.j2"
       dest: "/home/{{ ansible_user }}/docker-compose-pgadmin.yml"
       mode: "0755"
+      owner: "5050"
+      group: "5050"
 
   - name: "Generation du fichier de conf initial de pgadmin "
     template:
       src: "servers.json.j2"
       dest: /home/{{ ansible_user }}/servers.json
       mode: "0755"
+      owner: "5050"
+      group: "5050"
       
   - name: "Lancement du docker compose"
     command: "docker-compose -f /home/{{ ansible_user }}/docker-compose-pgadmin.yml up -d"
