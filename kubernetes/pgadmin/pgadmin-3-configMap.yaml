@@ -1,0 +1,21 @@
+#Create Config Map
+apiVersion: v1
+kind: ConfigMap
+metadata:
+ name: pgadmin-config
+ namespace: icgroup
+data:
+ servers.json: |
+   {
+       "Servers": {
+         "1": {
+           "Name": "PostgreSQL DB",
+           "Group": "Servers",
+           "Port": 5432,
+           "Username": "user-odoo",
+           "Host": "odoo-postgres",
+           "SSLMode": "prefer",
+           "MaintenanceDB": "postgres"
+         }
+       }
+   }

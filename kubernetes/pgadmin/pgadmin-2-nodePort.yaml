@@ -1,0 +1,20 @@
+#Create service to connnect from webapp to odoo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: icgroup
+  name: pgadmin
+  labels:
+    app: pgadmin
+    environment : production
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+    nodePort: 31002
+  selector:
+    app: pgadmin
+    tier: frontend
+  type: NodePort

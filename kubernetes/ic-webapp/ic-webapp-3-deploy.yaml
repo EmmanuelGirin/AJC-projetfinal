@@ -1,0 +1,43 @@
+
+#Deploy ic-web
+--- 
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  labels: 
+    app: ic-web
+    environment: production
+  name: ic-web
+  namespace: icgroup
+spec: 
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: ic-web
+  strategy: {}
+  template: 
+    metadata: 
+      labels: 
+        app: ic-web
+        environment: production
+    spec: 
+      containers: 
+        - 
+          env: 
+            - 
+              name: ODOO_URL
+              #your value here
+              value: "http://192.168.1.59:31001"
+            - 
+              name: PGADMIN_URL
+              #your value here
+              value: "http://192.168.1.59:31002"
+          image: "esgirin/ic-webapp:1.0"
+          name: ic-webapp
+          ports: 
+            - 
+              containerPort: 8080
+          resources: {}
+          volumeMounts: ~
+      initContainers: ~
+status: {}

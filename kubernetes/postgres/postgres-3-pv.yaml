@@ -1,0 +1,18 @@
+#Create PV for Postgress
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: data-pgress-volume
+  namespace: icgroup
+  labels:
+    type: local
+    environment: production
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data/psgress"

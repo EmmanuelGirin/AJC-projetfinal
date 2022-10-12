@@ -1,0 +1,17 @@
+#Create service to connnect to db
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: icgroup
+  name: odoo-postgres
+  labels:
+    app: odoo
+    environment : production
+spec:
+  ports:
+  - port: 5432
+    targetPort: 5432
+  selector:
+    app: odoo
+    tier: postgres

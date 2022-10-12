@@ -1,0 +1,17 @@
+#Persistent Volume Claim for pgadmin data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pgadmin-pvc
+  labels:
+    app: odoo
+    env: prod
+  namespace: ic-webapp
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi

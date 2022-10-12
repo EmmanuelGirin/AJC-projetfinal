@@ -1,0 +1,20 @@
+#Create service to connnect from webapp to odoo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: icgroup
+  name: odoo
+  labels:
+    app: odoo
+    environment : production
+spec:
+  ports:
+  - port: 8069
+    protocol: TCP
+    targetPort: 8069
+    nodePort: 31001
+  selector:
+    app: odoo
+    tier: frontend
+  type: NodePort
