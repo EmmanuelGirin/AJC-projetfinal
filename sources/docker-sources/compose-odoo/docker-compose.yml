@@ -1,0 +1,79 @@
+version: '3.7'
+
+services:
+  
+  db:
+    container_name: ${NAME_DOCKER_POSTGRES}
+    image: postgres:12
+    user: root
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGDATA: ${PG_DATA}
+    volumes:
+      - odoo-db-data:${PG_DATA}
+    
+    ports:
+      - "5432:5432"
+
+    networks:
+      - backend
+    
+    restart: always
+
+  odoo:
+    container_name: ${NAME_DOCKER_ODOO}
+    image: odoo:13
+    user: root
+    depends_on:
+      - db
+
+    ports:
+      - "${ODOO_PORT}:8069"
+
+    networks:
+      - frontend
+      - backend
+
+    volumes:
+      - odoo-web-data:${ODOO_WEB_DATA}
+      - ${ODOO_CONFIG}
+      - ${ODOO_ADDONS}
+
+  pgadmin:
+      container_name: pgadmin_container
+      image: dpage/pgadmin4
+      user: root
+      depends_on:
+        - db
+      
+      environment:
+        PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+        PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+        PGADMIN_CONFIG_SERVER_MODE: 'False'
+        PGADMIN_LISTEN_PORT: ${PGADMIN_LISTEN_PORT}
+    
+      ports:
+        - "${PGADMIN_PORT}:${PGADMIN_LISTEN_PORT}"
+
+      networks:
+        - frontend
+        - backend
+
+      logging:
+        driver: "none"
+    
+      volumes:
+        - pgadmin4:${PGADMIN_DATA}
+    
+      restart: always
+
+networks:
+  frontend: {}
+  backend: {}
+    #driver: bridge
+
+volumes:
+  odoo-db-data:
+  odoo-web-data:
