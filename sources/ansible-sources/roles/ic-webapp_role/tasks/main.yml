@@ -17,3 +17,5 @@
       PGADMIN_URL: "{{ pgadmin_url }}"
     networks:
       - name: "{{ ic_webapp_network }}"
+  vars:
+    ansible_python_interpreter: /user/bin/python3
