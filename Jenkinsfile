@@ -5,21 +5,25 @@ pipeline {
     IMAGE_TAG = "latest"
     ODOO_URL = "https://www.gmail.com"
     PGADMIN_URL = "https://www.whitehouse.gov"
-    PORT_EXPOSED = "80" //à paraméter dans le job
+    PORT_EXPOSED = "8000" //à paraméter dans le job
     STAGING = "${ID_DOCKER}-staging"
     PRODUCTION = "${ID_DOCKER}-production"
   }    
   
   agent none
   stages {
+    /*stage('get Image Version') { 
+      agent any   
+      steps {
+        IMAGE_TAG = sh(script: 'awk \'/version/ {sub(/^.* *version/,""); print $2}\' $pwd/sources/ic-web-app/releases.txt', returnStdout: true).trim()
+      }
+    } */
     stage('Build image') {
       agent any
       steps {
         script {
           sh '''
-            git clone https://github.com/EmmanuelGirin/ic-webapp/
-            cd ic-webapp
-            $IMAGE_TAG = $(awk '/version/ {sub(/^.* *version/,""); print $2}' releases.txt)
+            cd sources/ic-web-app
             docker build -t ${ID_DOCKER}/$IMAGE_NAME:$IMAGE_TAG .
             '''
         }
