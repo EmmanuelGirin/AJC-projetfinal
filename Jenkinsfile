@@ -98,8 +98,9 @@ pipeline {
           steps {
             script {
               sh '''
-              export ANSIBLE_CONFIG=$(pwd)/sources/ansible-sources/ansible.cfg
-              ansible-playbook sources/ansible-sources/master.yml --vault-password-file $VAULT_PASS_FILE
+              cd sources/ansible-sources/
+              export ANSIBLE_CONFIG=$./ansible.cfg
+              ansible-playbook master.yml --vault-password-file $VAULT_PASS_FILE -i hosts.yml
               '''
            }
           }
