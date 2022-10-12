@@ -17,21 +17,22 @@ services:
         - "{{ PGADMIN_PORT }}:{{ PGADMIN_LISTEN_PORT }}"
 
       networks:
-        - frontend
-        - backend
+        - {{ ic_webapp_network }}
+        - {{ postgres_network }}
 
       logging:
         driver: "none"
     
       volumes:
-        - pgadmin4:{{ PGADMIN_DATA }} 
+        - ${PWD}/servers.json:/pgadmin4/servers.json
+        - {{ PGADMIN_VOLUME_NAME }}:{{ PGADMIN_DATA_FILE }} 
     
       restart: always
 
 networks:
-  frontend: {}
-  backend: {}
+  {{ ic_webapp_network }}: {}
+  {{ postgres_network }}: {}
     #driver: bridge
 
 volumes:
-  pgadmin4:
+  {{ PGADMIN_VOLUME_NAME }}:

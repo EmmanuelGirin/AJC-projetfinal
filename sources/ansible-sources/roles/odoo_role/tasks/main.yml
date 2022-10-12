@@ -5,5 +5,9 @@
       dest: "/home/{{ ansible_user }}/docker-compose-odoo.yml"
       mode: "0755"
 
+  - name : "create ic-webapp network"
+    docker_network:
+      name: "{{ postgres_network }}"
+
   - name: "Lancement du docker compose"
     command: "docker-compose -f /home/{{ ansible_user }}/docker-compose-odoo.yml up -d"

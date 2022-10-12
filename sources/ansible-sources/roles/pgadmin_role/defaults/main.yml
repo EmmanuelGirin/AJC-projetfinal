@@ -2,5 +2,12 @@ PGADMIN_DEFAULT_EMAIL: "{{ pgadmin_default_email_vault }}"
 PGADMIN_DEFAULT_PASSWORD: "{{ pgadmin_default_pwd_vault }}"
 PGADMIN_LISTEN_PORT: 80
 PGADMIN_PORT: 5050
-PGADMIN_DATA: /var/lib/pgadmin
+PGADMIN_VOLUME_NAME: pgadmin4
+PGADMIN_DATA_FILE: /var/lib/pgadmin
 NAME_DOCKER_PGADMIN: docker-pgadmin
+PGADMIN_CONFIG_NAME: docker_postgres
+PGADMIN_CONFIG_GROUP: docker_postgres_group
+PGADMIN_CONFIG_USERNAME: "{{ postgres_user_vault }}"
+PGADMIN_CONFIG_HOST: 192.168.99.12
+ic_webapp_network: ic_network_webapp
+postgres_network: network_postgres

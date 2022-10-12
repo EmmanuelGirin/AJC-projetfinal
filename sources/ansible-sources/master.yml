@@ -1,6 +1,6 @@
 ---
 - name: "Installation odoo et postgres"
-  hosts: prod
+  hosts: odoo
   become: true
   vars_files:
     - files/secrets/creditentials.yml
@@ -8,7 +8,7 @@
     - role: docker_role
     - role: odoo_role
 - name: "Installation ic_web_app et pg_admin"
-  hosts: dev
+  hosts: webapp_pg
   become: true
   vars_files:
     - files/secrets/creditentials.yml
