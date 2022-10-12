@@ -5,15 +5,15 @@ services:
     container_name: {{ NAME_DOCKER_POSTGRES }}
     image: postgres:12
     environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: {{ POSTGRES_USER }}
-      POSTGRES_PASSWORD: {{ POSTGRES_PASSWORD }}
-      PGDATA: {{ PG_DATA_FILE }}
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER={{ POSTGRES_USER }}
+      - POSTGRES_PASSWORD={{ POSTGRES_PASSWORD }}
+      - PGDATA={{ PG_DATA_FILE }}
     volumes:
       - {{ PG_DATA }}:{{ PG_DATA_FILE }}
     
     ports:
-      - "5432:5432"
+      - "{{ POSTGRES_PORT }}:5432"
 
     networks:
       - {{ postgres_network }}
@@ -37,6 +37,11 @@ services:
       - {{ ODOO_DATA }}:{{ ODOO_WEB_DATA_FILE }}
       - {{ ODOO_CONFIG }}
       - {{ ODOO_ADDONS }}
+    environment:
+      - USER={{ POSTGRES_USER }}
+      - PASSWORD={{ POSTGRES_PASSWORD }}
+      - HOST="postgres"
+      - PORT={{ POSTGRES_PORT }}
       
 networks:
   {{ ic_webapp_network }}: {}
