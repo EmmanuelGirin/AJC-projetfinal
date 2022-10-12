@@ -4,7 +4,7 @@
   docker_network:
     name: "{{ ic_webapp_network }}"
   vars:
-    ansible_python_interpreter: /user/bin/python3
+    ansible_python_interpreter: /usr/bin/python3
 
 - name : "Launch ic-webapp container"
   docker_container:
@@ -18,4 +18,4 @@
     networks:
       - name: "{{ ic_webapp_network }}"
   vars:
-    ansible_python_interpreter: /user/bin/python3
+    ansible_python_interpreter: /usr/bin/python3
