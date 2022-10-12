@@ -1,7 +1,4 @@
 ---
-- name: "Ensure old versions of Docker are not installed."
-  command: "yum remove -y docker*"
-
 - name: Update System
   yum:
     name: "*"
@@ -11,6 +8,7 @@
   yum:
     name: "{{ item }}"
     state: present
+    update_cache: yes
   with_items:
     - yum-utils
     - device-mapper-persistent-data
@@ -28,21 +26,20 @@
     - device-mapper-persistent-data
     - lvm2
     - python3
-  
+
 - name: download pip script
   get_url:
     url: https://bootstrap.pypa.io/pip/3.6/get-pip.py
     dest: /tmp/get-pip.py
-
 - name: install python-pip
   command: python3 /tmp/get-pip.py
   ignore_errors: true
-
 - name: Install docker python
   pip:
     name: docker-py
     executable: /usr/local/bin/pip3
-
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
 - name: Add Docker ce repo
   get_url:
     url: https://download.docker.com/linux/centos/docker-ce.repo
@@ -50,8 +47,8 @@
   when: ansible_distribution == "CentOS"
 
 - name: "Install Docker on centos"
-  yum: 
-    name: docker 
+  yum:
+    name: docker
     state: present
   when: ansible_distribution == "CentOS"
 
@@ -66,16 +63,23 @@
     name: "{{ ansible_user }}"
     groups: dockerroot
     append: yes
-  when: ansible_distribution == "CentOS"    
+  when: ansible_distribution == "CentOS"
+
+- name: Add remote user to docker group on EC2
+  user:
+    name: "{{ ansible_user }}"
+    groups: docker
+    append: yes
+  when: ansible_distribution == "Amazon"
 
 - name: Start and enable the Docker daemon
-  service: 
-    name: docker 
-    state: started 
+  service:
+    name: docker
+    state: started
     enabled: yes
 
 - name: Install docker-compose
   get_url:
     url: https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64
     dest: /usr/bin/docker-compose
-    mode: 0755    
+    mode: 0755
