@@ -37,10 +37,11 @@ pipeline {
         steps {
             script {
               sh '''
+                cd sources/ic-web-app
                 echo "Clean Environment"
                 docker rm -f $IMAGE_NAME || echo "container does not exist"
                 docker run --name $IMAGE_NAME -d -p ${PORT_EXPOSED}:8080 -e ODOO_URL=${ODOO_URL} -e PGADMIN_URL=${PGADMIN_URL} ${ID_DOCKER}/$IMAGE_NAME:$IMAGE_TAG
-                sleep 30
+                sleep 15
               '''
               }
           }
