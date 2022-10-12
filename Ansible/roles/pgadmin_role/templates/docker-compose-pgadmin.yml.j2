@@ -5,27 +5,33 @@ services:
   pgadmin:
       container_name: {{ NAME_DOCKER_PGADMIN }} 
       image: dpage/pgadmin4
+      user: root
       
       environment:
-        - PGADMIN_DEFAULT_EMAIL: {{ PGADMIN_DEFAULT_EMAIL }} 
-        - PGADMIN_DEFAULT_PASSWORD: {{ PGADMIN_DEFAULT_PASSWORD }} 
-      
+        PGADMIN_DEFAULT_EMAIL: {{ PGADMIN_DEFAULT_EMAIL }} 
+        PGADMIN_DEFAULT_PASSWORD: {{ PGADMIN_DEFAULT_PASSWORD }} 
+        PGADMIN_CONFIG_SERVER_MODE: 'False'
+        PGADMIN_LISTEN_PORT: {{ PGADMIN_LISTEN_PORT }} 
+    
       ports:
         - "{{ PGADMIN_PORT }}:{{ PGADMIN_LISTEN_PORT }}"
 
       networks:
-        - {{ PG_NETWORK }}
+        - frontend
+        - backend
+
+      logging:
+        driver: "none"
     
       volumes:
-        - ${PWD}/servers.json:/{{ PGADMIN_DATA }}/servers.json
-        - {{ PGADMIN_DATA }}:{{ PGADMIN_DATA_FILE }} 
+        - pgadmin4:{{ PGADMIN_DATA }} 
     
       restart: always
 
 networks:
-  {{ PG_NETWORK }}:
-    driver: bridge
-    name: {{ PG_NETWORK }}
+  frontend: {}
+  backend: {}
+    #driver: bridge
 
 volumes:
-  {{ PGADMIN_DATA }}:
+  pgadmin4:

@@ -1,5 +1,5 @@
 ---
-- name: "Installation chez les dev"
+- name: "Installation odoo et postgres"
   hosts: odoo
   become: true
   vars_files:
@@ -7,8 +7,8 @@
   roles:
     - role: docker_role
     - role: odoo_role
-- name: "Installation chez la prod"
-  hosts: webapp_pg
+- name: "Installation ic_web_app et pg_admin"
+  hosts: ic-webapp_pg
   become: true
   vars_files:
     - files/secrets/creditentials.yml
@@ -16,4 +16,3 @@
     - role: docker_role
     - role: ic-webapp_role
     - role: pgadmin_role
-    
