@@ -8,6 +8,7 @@ pipeline {
     PORT_EXPOSED = "8000" //à paraméter dans le job
     STAGING = "${ID_DOCKER}-staging"
     PRODUCTION = "${ID_DOCKER}-production"
+    VAULT_PASS_FILE = credentials('ANSIBLE_VAULT_PASS')
   }    
   
   agent none
@@ -83,24 +84,13 @@ pipeline {
              }
           }
         }
-        stage ("PRODUCTION - Deploy odoo") {
+        stage ("PRODUCTION - Deploy Application") {
           agent any
           steps {
             script {
               sh '''
               export ANSIBLE_CONFIG=$(pwd)/sources/ansible-ressources/ansible.cfg
-              ansible-playbook sources/ansible-ressources/playbooks/deploy-pgadmin.yml --vault-password-file vault.key -l pg_admin
-              '''
-           }
-          }
-        }
-        stage ("PRODUCTION - Deploy pgadmin") {
-          agent any
-          steps {
-            script {
-              sh '''
-              export ANSIBLE_CONFIG=$(pwd)/sources/ansible-ressources/ansible.cfg
-              ansible-playbook sources/ansible-ressources/playbooks/deploy-pgadmin.yml --vault-password-file vault.key -l pg_admin
+              ansible-playbook sources/ansible-sources/master.yml --vault-password-file ${VAULT_PASS_FILE}
               '''
            }
           }
