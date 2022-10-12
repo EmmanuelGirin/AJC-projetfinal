@@ -15,8 +15,7 @@ pipeline {
     stage('get Image Version') {
       agent any   
       steps {
-        tempVersion = sh(script: 'awk \'/version/ {sub(/^.* *version/,""); print $2}\' $pwd/sources/ic-web-app/releases.txt', returnStdout: true).trim()
-        IMAGE_TAG = tempVersion
+        IMAGE_TAG = sh(script: 'awk \'/version/ {sub(/^.* *version/,""); print $2}\' $pwd/sources/ic-web-app/releases.txt', returnStdout: true).trim()
       }
     }
     stage('Build image') {
