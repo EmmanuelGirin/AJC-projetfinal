@@ -2,7 +2,6 @@ pipeline {
   environment {
     ID_DOCKER = "${ID_DOCKER_PARAMS}"
     IMAGE_NAME = "ic-webapp"
-    IMAGE_TAG = "${sh(script:'awk '/version:/ {sub(/^.**version:/,"");print $1}' sources/ic-web-app/releases.txt', returnStdout: true).trim()}"
     ODOO_URL = "https://www.gmail.com"
     PGADMIN_URL = "https://www.whitehouse.gov"
     PORT_EXPOSED = "8000" //à paraméter dans le job
@@ -19,7 +18,8 @@ pipeline {
         script {
           sh '''
             cd sources/ic-web-app 
-            docker build -t ${ID_DOCKER}/$IMAGE_NAME:${IMAGE_TAG} .
+            IMAGE_VERSION_TAG=$(awk '/version/ {sub(/^.* *version/,""); print $2}' releases.txt)
+            docker build -t ${ID_DOCKER}/$IMAGE_NAME:$IMAGE_VERSION_TAG .
             '''
         }
       }
@@ -79,8 +79,9 @@ pipeline {
              script {
                sh '''
                 cd sources/ic-web-app
+                IMAGE_VERSION_TAG=$(awk '/version/ {sub(/^.* *version/,""); print $2}' releases.txt)
 			          echo $DOCKERHUB_PASSWORD | docker login -u $ID_DOCKER --password-stdin
-			          docker push ${ID_DOCKER}/$IMAGE_NAME:${IMAGE_TAG}
+			          docker push ${ID_DOCKER}/$IMAGE_NAME:$IMAGE_VERSION_TAG
                '''
              }
           }
