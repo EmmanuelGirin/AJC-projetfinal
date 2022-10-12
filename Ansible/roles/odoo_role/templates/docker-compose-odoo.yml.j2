@@ -4,14 +4,13 @@ services:
   db:
     container_name: {{ NAME_DOCKER_POSTGRES }}
     image: postgres:12
-    user: root
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: {{ POSTGRES_USER }}
       POSTGRES_PASSWORD: {{ POSTGRES_PASSWORD }}
-      PGDATA: {{ PG_DATA }}
+      PGDATA: {{ PG_DATA_FILE }}
     volumes:
-      - odoo-db-data:{{ PG_DATA }}
+      - {{ PG_DATA }}:{{ PG_DATA_FILE }}
     
     ports:
       - "5432:5432"
@@ -24,7 +23,6 @@ services:
   odoo:
     container_name: {{ NAME_DOCKER_ODOO }}
     image: odoo:13
-    user: root
     depends_on:
       - db
 
@@ -36,7 +34,7 @@ services:
       - backend
 
     volumes:
-      - odoo-web-data:{{ ODOO_WEB_DATA }}
+      - {{ ODOO_DATA }}:{{ ODOO_WEB_DATA_FILE }}
       - {{ ODOO_CONFIG }}
       - {{ ODOO_ADDONS }}
       
@@ -46,5 +44,5 @@ networks:
     #driver: bridge
 
 volumes:
-  odoo-db-data:
-  odoo-web-data:
+  {{ PG_DATA }}:
+  {{ ODOO_DATA }}:

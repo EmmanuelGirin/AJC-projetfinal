@@ -2,9 +2,11 @@
 POSTGRES_DB: postgres
 POSTGRES_USER: "{{ postgres_user_vault }}"
 POSTGRES_PASSWORD: "{{ odoo_pwd_vault }}"
-PG_DATA: /var/lib/postgresql/data/pgdata
+PG_DATA: odoo-db-data
+PG_DATA_FILE: /var/lib/postgresql/data/pgdata
 ODOO_PORT: 8069
-ODOO_WEB_DATA: /var/lib/odoo
+ODOO_DATA: odoo-web-data
+ODOO_WEB_DATA_FILE: /var/lib/odoo
 ODOO_CONFIG: ./config:/etc/odoo
 ODOO_ADDONS: ./addons:/mnt/extra-addons
 NAME_DOCKER_ODOO: docker_odoo
