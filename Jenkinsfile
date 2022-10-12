@@ -12,11 +12,13 @@ pipeline {
   
   agent none
   stages {
-    stage('get Image Version')    
-        steps {
-          tempVersion = sh(script: 'awk \'/version/ {sub(/^.* *version/,""); print $2}\' $pwd/ic-webapp/releases.txt', returnStdout: true).trim()
-          IMAGE_TAG = tempVersion
-        }
+    stage('get Image Version') {
+      agent any   
+      steps {
+        tempVersion = sh(script: 'awk \'/version/ {sub(/^.* *version/,""); print $2}\' $pwd/sources/ic-web-app/releases.txt', returnStdout: true).trim()
+        IMAGE_TAG = tempVersion
+      }
+    }
     stage('Build image') {
       agent any
       steps {
