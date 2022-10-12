@@ -40,7 +40,7 @@ services:
     environment:
       - USER={{ POSTGRES_USER }}
       - PASSWORD={{ POSTGRES_PASSWORD }}
-      - HOST={{ ip_serveur_odoo_postgres }}
+      - HOST=db
       - PORT={{ POSTGRES_PORT }}
       
 networks:
