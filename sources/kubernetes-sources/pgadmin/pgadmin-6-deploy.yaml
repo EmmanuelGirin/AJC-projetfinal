@@ -55,4 +55,4 @@ spec:
            path: servers.json 
      - name: pg-admin-data
        persistentVolumeClaim:
-       claimName: pgadmin-pvc
+         claimName: pgadmin-pvc
