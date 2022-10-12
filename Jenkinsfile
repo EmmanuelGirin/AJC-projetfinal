@@ -2,7 +2,7 @@ pipeline {
   environment {
     ID_DOCKER = "${ID_DOCKER_PARAMS}"
     IMAGE_NAME = "ic-webapp"
-    IMAGE_TAG = "$(awk '/version/ {sub(/^.* *version/,\"\"); print $2}' releases.txt)"
+    IMAGE_TAG = "${sh(script:'awk '/version:/ {sub(/^.**version:/,"");print $1}' sources/ic-web-app/releases.txt', returnStdout: true).trim()}"
     ODOO_URL = "https://www.gmail.com"
     PGADMIN_URL = "https://www.whitehouse.gov"
     PORT_EXPOSED = "8000" //à paraméter dans le job
