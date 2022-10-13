@@ -81,9 +81,6 @@ pipeline {
         }
         stage ("PRODUCTION - Deploy Application") {
           agent any
-          when {
-		        branch 'main'
-          }
           environment{
             VAULT_PASS_FILE = credentials('ANSIBLE_VAULT_PASS')
           }
