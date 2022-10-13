@@ -25,17 +25,6 @@ pipeline {
       }
     }
 
-    stage('Scan image with trivy') {
-      agent any
-      steps {
-          sh '''
-            cd sources/ic-web-app 
-            IMAGE_VERSION_TAG=$(awk '/version/ {sub(/^.* *version/,""); print $2}' releases.txt)
-            trivy image -f json -o results-image.json ${ID_DOCKER}/${IMAGE_NAME}:$IMAGE_VERSION_TAG
-          '''
-      }
-    }
-
       stage('Run container based on builded image') {
         agent any
         steps {
